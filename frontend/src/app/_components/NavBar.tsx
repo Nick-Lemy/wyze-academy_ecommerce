@@ -12,47 +12,38 @@ const NavBar = () => {
         <span className="text-lg text-primary font-bold">Nick&apos;s Shop</span>
       </div>
       <div className="space-x-4">
-        <Link
-          href="/"
-          className="text-primary/70 hover:text-primary font-semibold"
-        >
-          Home
-        </Link>
-        <Link
-          href="/whats-new"
-          className="text-primary/70 hover:text-primary font-semibold"
-        >
-          What&apos;s New
-        </Link>
-        <Link
-          href="/contact"
-          className="text-primary/70 hover:text-primary font-semibold"
-        >
-          Contact
-        </Link>
-        <Link
-          href="/about"
-          className="text-primary/70 hover:text-primary font-semibold"
-        >
-          About
-        </Link>
+        <LinkItem href="/" text="Home" />
+        <LinkItem href="/whats-new" text="What's New" />
+        <LinkItem href="/contact" text="Contact" />
+        <LinkItem href="/about" text="About" />
       </div>
       <div className="flex  gap-5">
-        <Link
-          href="/cart"
-          className="text-primary/70 hover:text-primary font-semibold"
-        >
+        <LinkItem href="/cart">
           <ShoppingCart className="text-primary size-7" />
-        </Link>
-        <Link
-          href="/account"
-          className="text-primary/70 hover:text-primary font-semibold"
-        >
+        </LinkItem>
+        <LinkItem href="/account">
           <UserIcon className="size-7 text-primary" />
-        </Link>
+        </LinkItem>
       </div>
     </nav>
   );
 };
+
+const LinkItem = ({
+  href,
+  text,
+  children,
+}: {
+  href: string;
+  text?: string;
+  children?: React.ReactNode;
+}) => (
+  <Link
+    href={href}
+    className="text-primary hover:text-primary-hover font-semibold"
+  >
+    {text ? text : children}
+  </Link>
+);
 
 export default NavBar;

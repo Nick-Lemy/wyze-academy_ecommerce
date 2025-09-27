@@ -11,4 +11,5 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --color-primary: #003d28;
+  --color-primary-hover: #387767;
 }

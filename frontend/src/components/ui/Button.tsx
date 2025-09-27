@@ -15,8 +15,8 @@ const buttonVariants = cva(
         destructive:
           "bg-error text-white hover:text-error hover:bg-white hover:border-error",
         outline:
-          "bg-white border-gray-300 text-gray hover:bg-gray-50 hover:text-gray-900",
-        "default-outline": "text-primary border-primary",
+          "bg-transparent border-primary-hover text-primary-hover hover:bg-primary-hover hover:text-white",
+        "default-outline": "text-primary-hover border-primary-hover",
         "secondary-outline": "text-secondary border-secondary",
         ghost: "bg-white text-primary border-transparent hover:bg-surface-200",
         "ghost-secondary":

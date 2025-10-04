@@ -6,5 +6,9 @@ export type Product = {
   rating: number;
   price: number;
   image: string;
+  images?: string[];
   isInFavorites: boolean;
+  features?: string[];
+  sku?: string;
+  category?: string;
 };

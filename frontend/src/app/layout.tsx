@@ -26,12 +26,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white font-sans px-20 py-5 text-black`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white font-sans pt-5 text-black`}
       >
-        <header>
+        <header className=" px-10">
           <NavBar />
         </header>
-        {children}
+        <div className=" px-10">{children}</div>
       </body>
     </html>
   );

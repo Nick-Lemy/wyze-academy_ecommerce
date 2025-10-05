@@ -13,7 +13,7 @@ const NavBar = () => {
       </div>
       <div className="space-x-4">
         <LinkItem href="/" text="Home" />
-        <LinkItem href="/whats-new" text="What's New" />
+        <LinkItem href="/favorite" text="Favorite" />
         <LinkItem href="/contact" text="Contact" />
         <LinkItem href="/about" text="About" />
       </div>

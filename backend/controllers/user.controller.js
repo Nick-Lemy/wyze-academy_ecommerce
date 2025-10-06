@@ -30,21 +30,21 @@ export async function addUserController(req, res) {
         }
         const encryptedPassword = await encryptPassword(password)
 
-        const token = generateToken({ userId: user._id, email })
         const user = await createUser({
             firstName,
             lastName,
             email: email.toLowerCase(),
             password: encryptedPassword,
             address,
-            token
         })
+        const token = generateToken({ userId: user._id, email })
+        user.token = token
         user.password = undefined
         user.__v = undefined
-        user.__v = undefined
 
-        res.status(201).json(user)
+        res.status(201).json({ user })
     } catch (error) {
+        console.log(error)
         res.status(500).send({ error: 'Internal Server Error' });
     }
 }

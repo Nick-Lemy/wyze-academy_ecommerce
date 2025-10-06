@@ -6,14 +6,36 @@ import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import Logo from "@/assets/logo.jpg";
+import { useMutation } from "@tanstack/react-query";
+import { login, saveAuthData } from "@/lib/api/auth";
+import { useRouter } from "next/navigation";
+import { AxiosError } from "axios";
 
 const LoginPage = () => {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>(
     {}
   );
+
+  // Login mutation
+  const loginMutation = useMutation({
+    mutationFn: login,
+    onSuccess: (data) => {
+      // Save token and user data to localStorage
+      saveAuthData(data.user, data.token);
+
+      // Redirect to account page
+      router.push("/account");
+    },
+    onError: (error: AxiosError<{ message: string }>) => {
+      const errorMessage =
+        error.response?.data?.message || "Login failed. Please try again.";
+      setErrors({ email: errorMessage });
+    },
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,9 +60,11 @@ const LoginPage = () => {
       return;
     }
 
-    // TODO: Implement actual login logic
-    console.log("Login attempt:", { email, password });
+    // Clear previous errors
     setErrors({});
+
+    // Call the login API
+    loginMutation.mutate({ email, password });
   };
 
   return (
@@ -117,8 +141,13 @@ const LoginPage = () => {
               </Link>
             </div>
 
-            <Button type="submit" className="w-full" size="sm">
-              Sign In
+            <Button
+              type="submit"
+              className="w-full"
+              size="sm"
+              disabled={loginMutation.isPending}
+            >
+              {loginMutation.isPending ? "Signing In..." : "Sign In"}
             </Button>
           </form>
 

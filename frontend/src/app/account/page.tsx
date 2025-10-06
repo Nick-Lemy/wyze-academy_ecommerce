@@ -1,14 +1,30 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { sampleUser, sampleOrders } from "@/lib/sampleUserData";
 import ProfileSection from "./_components/ProfileSection";
 import OrdersSection from "./_components/OrdersSection";
-import { PackageIcon, UserIcon } from "lucide-react";
+import { PackageIcon, UserIcon, LogOut } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/Button";
 
 type TabType = "profile" | "orders";
 
 const AccountPage = () => {
+  const router = useRouter();
+  const { isAuthenticated, logout } = useAuth();
   const [activeTab, setActiveTab] = useState<TabType>("profile");
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push("/login");
+    }
+  }, [isAuthenticated, router]);
+
+  const handleLogout = () => {
+    logout();
+  };
 
   const tabs = [
     { id: "profile", label: "Profile", icon: UserIcon },
@@ -18,9 +34,20 @@ const AccountPage = () => {
   return (
     <main className="my-5 space-y-3">
       {/* Header */}
-      <div className="p-8">
-        <h1 className="text-4xl font-bold text-primary mb-2">My Account</h1>
-        <p className="text-gray-700">View your profile and order history</p>
+      <div className="p-8 flex justify-between items-center">
+        <div>
+          <h1 className="text-4xl font-bold text-primary mb-2">My Account</h1>
+          <p className="text-gray-700">View your profile and order history</p>
+        </div>
+        <Button
+          onClick={handleLogout}
+          variant="outline"
+          size="sm"
+          className="flex items-center gap-2"
+        >
+          <LogOut className="h-4 w-4" />
+          Logout
+        </Button>
       </div>
 
       {/* Tabs Navigation */}

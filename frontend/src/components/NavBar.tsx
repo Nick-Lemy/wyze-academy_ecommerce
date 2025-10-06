@@ -1,10 +1,14 @@
+"use client";
 import React from "react";
 import Logo from "@/assets/logo.jpg";
 import Image from "next/image";
 import { ShoppingCart, UserIcon } from "lucide-react";
 import Link from "next/link";
+import { useAuth } from "@/hooks/useAuth";
 
 const NavBar = () => {
+  const { isAuthenticated } = useAuth();
+
   return (
     <nav className="flex items-center justify-between bg-white">
       <div className="flex gap-1 items-center">
@@ -21,7 +25,7 @@ const NavBar = () => {
         <LinkItem href="/cart">
           <ShoppingCart className="text-primary size-7" />
         </LinkItem>
-        <LinkItem href="/login">
+        <LinkItem href={isAuthenticated ? "/account" : "/login"}>
           <UserIcon className="size-7 text-primary" />
         </LinkItem>
       </div>

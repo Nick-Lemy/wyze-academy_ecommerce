@@ -78,3 +78,12 @@ export async function getUserById(userId) {
         throw new Error("Error fetching user by id")
     }
 }
+
+export async function getUserByEmail(email) {
+    try {
+        const user = await User.findOne({ email })
+        return user
+    } catch (error) {
+
+    }
+}

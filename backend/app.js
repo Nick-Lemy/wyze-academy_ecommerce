@@ -5,6 +5,7 @@ import { PORT } from './configs/variables.js';
 import fileUpload from 'express-fileupload';
 import productRouter from './routes/product.route.js'
 import userRouter from './routes/user.route.js';
+import authRouter from './routes/auth.route.js'
 dotenv.config();
 import './configs/database.js';
 
@@ -29,6 +30,7 @@ app.get('/', (req, res) => {
 
 app.use('/products', productRouter)
 app.use('/users', userRouter)
+app.use('/auth', authRouter)
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

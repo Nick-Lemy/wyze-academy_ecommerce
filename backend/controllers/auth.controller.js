@@ -1,5 +1,5 @@
-import { comparePasswords, generateToken } from "../helpers/auth.helper.js";
-import { getUserByEmail } from "../models/user.model.js";
+import { comparePasswords, generateToken, encryptPassword } from "../helpers/auth.helper.js";
+import { getUserByEmail, createUser } from "../models/user.model.js";
 
 
 export async function registerController(req, res) {

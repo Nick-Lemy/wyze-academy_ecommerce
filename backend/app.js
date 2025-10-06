@@ -1,4 +1,3 @@
-dotenv.config();
 import express from 'express'
 import dotenv from 'dotenv'
 import { PORT } from './configs/variables.js';
@@ -7,12 +6,14 @@ import productRouter from './routes/product.route.js'
 import userRouter from './routes/user.route.js';
 import authRouter from './routes/auth.route.js'
 import { adminMiddleware, userMiddleware } from './middlewares/auth.middleware.js';
+import cors from 'cors';
 dotenv.config();
 import './configs/database.js';
 import orderRouter from './routes/order.route.js';
 
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 app.use(fileUpload({

@@ -1,9 +1,6 @@
 import { verifyToken } from '../helpers/auth.helper.js'
 
 export function userMiddleware(req, res, next) {
-    // console.log('headers:=>>>>>>>>>>>>.', req.headers)
-    console.log(req.headers.authorization)
-
     const token = req.headers.authorization?.split(' ')[1]
     if (!token) {
         res.status(403).send({ message: 'Token is missing' })
@@ -19,7 +16,7 @@ export function userMiddleware(req, res, next) {
 }
 
 export function adminMiddleware(req, res, next) {
-    const token = req.headers.Authorization.split(' ')[1]
+    const token = req.headers.authorization?.split(' ')[1]
     if (!token) {
         res.status(403).send({ message: 'Token is missing' })
     }

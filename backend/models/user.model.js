@@ -84,6 +84,6 @@ export async function getUserByEmail(email) {
         const user = await User.findOne({ email })
         return user
     } catch (error) {
-
+        throw new Error("Error fetching user by email")
     }
 }

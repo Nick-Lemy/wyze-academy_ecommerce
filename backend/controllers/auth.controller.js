@@ -29,7 +29,6 @@ export async function registerController(req, res) {
     }
 }
 
-
 export async function loginController(req, res) {
     try {
         const { email, password } = req.body;

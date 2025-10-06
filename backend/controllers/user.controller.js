@@ -48,3 +48,18 @@ export async function addUserController(req, res) {
         res.status(500).send({ error: 'Internal Server Error' });
     }
 }
+
+export async function getCurrentUserController(req, res) {
+    try {
+        const user = await getUserById(req.user.userId);
+        if (!user) {
+            return res.status(404).send({ error: 'User not found' });
+        }
+        user.password = undefined;
+        user.__v = undefined;
+        res.status(200).json(user);
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({ error: 'Internal Server Error' });
+    }
+}

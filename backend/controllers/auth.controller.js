@@ -1,5 +1,5 @@
 import { comparePasswords, generateToken, encryptPassword } from "../helpers/auth.helper.js";
-import { getUserByEmail, createUser } from "../models/user.model.js";
+import { getUserByEmail, createUser, getUserById } from "../models/user.model.js";
 
 
 export async function registerController(req, res) {
@@ -50,6 +50,7 @@ export async function loginController(req, res) {
 
 
 export async function getCurrentUserController(req, res) {
+    console.log(req.user)
     try {
         const user = await getUserById(req.user.userId);
         if (!user) {

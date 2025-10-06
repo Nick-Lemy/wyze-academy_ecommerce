@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs"
-import { SECRET_KEY } from "../configs/variables"
+import { SECRET_KEY } from "../configs/variables.js"
+import jwt from "jsonwebtoken"
 
 
 export async function encryptPassword(password) {

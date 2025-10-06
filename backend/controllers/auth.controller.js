@@ -17,7 +17,7 @@ export async function registerController(req, res) {
             password: encryptedPassword,
             address,
         })
-        const token = generateToken({ userId: user._id, email })
+        const token = generateToken({ userId: user._id, email, role: user.role })
         user.token = token
         user.password = undefined
         user.__v = undefined
@@ -40,7 +40,7 @@ export async function loginController(req, res) {
         if (!passwordValidity) {
             res.status(403).send({ message: "The password is incorrect" })
         }
-        const token = generateToken({ userId: user._id, email: user.email })
+        const token = generateToken({ userId: user._id, email: user.email, role: user.role })
         res.status(200).send({ user, token });
     } catch (error) {
         console.log(error)

@@ -7,5 +7,6 @@ productRouter.get('/:id', getProductByIdController);
 productRouter.put('/:id', modifyProductController);
 productRouter.post('/', addProductController);
 productRouter.delete('/:id', removeProductController);
+productRouter.post('/favorites',)
 
 export default productRouter;

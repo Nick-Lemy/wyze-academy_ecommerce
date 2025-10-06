@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose"
 import cloudinary from 'cloudinary';
 import { CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET, CLOUDINARY_CLOUD_NAME } from '../configs/variables.js';
+import User from "./user.model.js";
 
 const productSchema = new Schema({
     title: {
@@ -82,6 +83,7 @@ export async function getProductById(productId) {
         }
         return product;
     } catch (error) {
+        console.log(error)
         throw new Error("Error fetching product by id");
     }
 }
@@ -91,6 +93,7 @@ export async function getAllProducts() {
         const products = await Product.find();
         return products;
     } catch (error) {
+        console.log(error)
         throw new Error("Error fetching products");
     }
 }
@@ -100,6 +103,7 @@ export async function deleteProduct(productId) {
         await Product.findByIdAndDelete(productId);
         return { message: "Product deleted successfully" };
     } catch (error) {
+        console.log(error)
         throw new Error("Error deleting product");
     }
 }
@@ -109,6 +113,48 @@ export async function updateProduct(productId, updateData) {
         const updatedProduct = await Product.findByIdAndUpdate(productId, updateData, { new: true });
         return updatedProduct;
     } catch (error) {
+        console.log(error)
         throw new Error("Error updating product");
+    }
+}
+
+export async function addToFavorites(userId, productId) {
+    try {
+        const product = await Product.findById(productId);
+        const user = await User.findById(userId);
+        console.log(product, user)
+        if (!(product && user)) {
+            throw new Error("Product or User not found");
+        }
+        if (user.favorites.includes(productId)) {
+            throw new Error("Product already in favorites");
+        }
+        user.favorites.push(productId);
+        await user.save();
+        return user;
+    } catch (error) {
+        console.log(error)
+        throw new Error("Error adding to favorites");
+    }
+}
+
+export async function removeFromFavorites(userId, productId) {
+    try {
+        const product = await Product.findById(productId); productId
+        const user = await User.findById(userId);
+        if (!(product && user)) {
+            throw new Error('Product or User not found')
+        }
+        const index = user.favorites.findIndex(id => id === productId)
+        if (index === -1) {
+            throw new Error('Product is not in favorites')
+        }
+        const newFavorites = [...user.favorites.slice(0, index), ...user.favorites.slice(index + 1)]
+        user.favorites = newFavorites
+        await user.save()
+        return newFavorites
+    } catch (error) {
+        console.log(error)
+        throw new Error("Error removing from favorites");
     }
 }

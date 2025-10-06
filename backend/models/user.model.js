@@ -15,11 +15,11 @@ const userSchema = new Schema({
         default: null
     },
     favorites: {
-        type: [Product.schema],
+        type: [String],
         default: []
     },
     cart: {
-        type: [Product.schema],
+        type: [String],
         default: []
     },
     password: {

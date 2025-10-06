@@ -6,6 +6,7 @@ import fileUpload from 'express-fileupload';
 import productRouter from './routes/product.route.js'
 import userRouter from './routes/user.route.js';
 import authRouter from './routes/auth.route.js'
+import { adminMiddleware, userMiddleware } from './middlewares/auth.middleware.js';
 dotenv.config();
 import './configs/database.js';
 
@@ -28,8 +29,8 @@ app.get('/', (req, res) => {
     res.send('Hello World!');
 });
 
-app.use('/products', productRouter)
-app.use('/users', userRouter)
+app.use('/products', userMiddleware, productRouter)
+app.use('/users', adminMiddleware, userRouter)
 app.use('/auth', authRouter)
 
 app.listen(PORT, () => {

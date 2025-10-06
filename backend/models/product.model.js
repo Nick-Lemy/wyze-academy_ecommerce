@@ -158,3 +158,44 @@ export async function removeFromFavorites(userId, productId) {
         throw new Error("Error removing from favorites");
     }
 }
+
+export async function removeFromCart(userId, productId) {
+    try {
+        const product = await Product.findById(productId); productId
+        const user = await User.findById(userId);
+        if (!(product && user)) {
+            throw new Error('Product or User not found')
+        }
+        const index = user.cart.findIndex(id => id === productId)
+        if (index === -1) {
+            throw new Error('Product is not in cart')
+        }
+        const newCart = [...user.cart.slice(0, index), ...user.cart.slice(index + 1)]
+        user.cart = newCart
+        await user.save()
+        return newCart
+    } catch (error) {
+        console.log(error)
+        throw new Error("Error removing from favorites");
+    }
+}
+
+export async function addToCart(userId, productId) {
+    try {
+        const product = await Product.findById(productId);
+        const user = await User.findById(userId);
+        console.log(product, user)
+        if (!(product && user)) {
+            throw new Error("Product or User not found");
+        }
+        if (user.cart.includes(productId)) {
+            throw new Error("Product already in cart");
+        }
+        user.cart.push(productId);
+        await user.save();
+        return user;
+    } catch (error) {
+        console.log(error)
+        throw new Error("Error adding to cart");
+    }
+}

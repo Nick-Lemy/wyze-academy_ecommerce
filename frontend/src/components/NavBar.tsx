@@ -21,7 +21,7 @@ const NavBar = () => {
         <LinkItem href="/cart">
           <ShoppingCart className="text-primary size-7" />
         </LinkItem>
-        <LinkItem href="/account">
+        <LinkItem href="/login">
           <UserIcon className="size-7 text-primary" />
         </LinkItem>
       </div>

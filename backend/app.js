@@ -1,3 +1,4 @@
+dotenv.config();
 import express from 'express'
 import dotenv from 'dotenv'
 import { PORT } from './configs/variables.js';
@@ -9,6 +10,12 @@ import './configs/database.js';
 
 
 const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }))
+app.use(fileUpload({
+    useTempFiles: true,
+    tempFileDir: '/tmp/'
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 app.use(fileUpload({

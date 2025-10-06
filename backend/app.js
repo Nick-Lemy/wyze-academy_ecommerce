@@ -9,6 +9,7 @@ import authRouter from './routes/auth.route.js'
 import { adminMiddleware, userMiddleware } from './middlewares/auth.middleware.js';
 dotenv.config();
 import './configs/database.js';
+import orderRouter from './routes/order.route.js';
 
 
 const app = express();
@@ -26,6 +27,7 @@ app.get('/', (req, res) => {
 app.use('/products', userMiddleware, productRouter)
 app.use('/users', adminMiddleware, userRouter)
 app.use('/auth', authRouter)
+app.use('/orders', userMiddleware, orderRouter)
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

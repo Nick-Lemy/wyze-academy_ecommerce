@@ -73,7 +73,7 @@ export async function removeProductController(req, res) {
 
 export async function addToFavoritesController(req, res) {
     const { id } = req.params;
-    const userId = req.user._id;
+    const { userId } = req.user;
     try {
         const result = await addToFavorites(userId, id);
         res.status(200).send(result);
@@ -84,10 +84,11 @@ export async function addToFavoritesController(req, res) {
 }
 
 export async function removeFromFavoritesController(req, res) {
-    const userId = req.user._id
-    const { productId } = req.body
+    const { id } = req.params;
+    const { userId } = req.user;
+    console.log(userId, id)
     try {
-        const data = await removeFromFavorites(userId, productId)
+        const data = await removeFromFavorites(userId, id)
         return res.status(200).send({ data, message: 'Product removed from favorites!' })
     } catch (error) {
         console.log(`Error: ${error.message}`)

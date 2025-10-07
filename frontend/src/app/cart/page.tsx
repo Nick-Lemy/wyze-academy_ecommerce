@@ -85,7 +85,9 @@ export default function CartPage() {
 
   const handleCheckout = () => {
     if (!user?.address) {
-      alert("Please add a shipping address in your profile before checking out.");
+      alert(
+        "Please add a shipping address in your profile before checking out."
+      );
       router.push("/account");
       return;
     }

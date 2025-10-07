@@ -31,10 +31,7 @@ const AccountPage = () => {
   });
 
   // Fetch user orders
-  const {
-    data: orders = [],
-    isLoading: ordersLoading,
-  } = useQuery({
+  const { data: orders = [], isLoading: ordersLoading } = useQuery({
     queryKey: ["orders"],
     queryFn: getMyOrders,
     enabled: isAuthenticated,
@@ -53,7 +50,9 @@ const AccountPage = () => {
       id: order._id,
       orderNumber: `ORD-${order._id.slice(-8).toUpperCase()}`,
       items: order.products.map((product) => {
-        const productDetails = products.find((p) => p._id === product.productId);
+        const productDetails = products.find(
+          (p) => p._id === product.productId
+        );
         return {
           id: product.productId,
           productId: product.productId,
@@ -64,10 +63,14 @@ const AccountPage = () => {
         };
       }),
       totalAmount: order.totalPrice,
-      status: order.status === "paid" ? "pending" : 
-              order.status === "received" ? "delivered" :
-              order.status === "shipping" ? "shipped" :
-              order.status as UIOrder["status"],
+      status:
+        order.status === "paid"
+          ? "pending"
+          : order.status === "received"
+          ? "delivered"
+          : order.status === "shipping"
+          ? "shipped"
+          : (order.status as UIOrder["status"]),
       orderDate: order.createdAt,
       deliveryDate: order.status === "received" ? order.updatedAt : undefined,
       shippingAddress: {

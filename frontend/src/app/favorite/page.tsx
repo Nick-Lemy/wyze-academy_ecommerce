@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getUserProfile } from "@/lib/api/auth";
 import { getProducts } from "@/lib/api/products";
 import ProductCard from "@/components/ProductCard";
+import Breadcrumb from "@/components/Breadcrumb";
 import { Product } from "@/lib/api/products";
 import { Product as UIProduct } from "@/app/types/products";
 import { HeartIcon } from "lucide-react";
@@ -108,6 +109,7 @@ export default function FavoritePage() {
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 md:px-10">
       <div className="max-w-7xl mx-auto">
+        <Breadcrumb items={[{ label: "My Favorites" }]} />
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-primary mb-2">My Favorites</h1>
           <p className="text-gray-600">

@@ -161,12 +161,14 @@ export async function removeFromFavorites(userId, productId) {
 
 export async function removeFromCart(userId, productId) {
     try {
-        const product = await Product.findById(productId); productId
+        const product = await Product.findById(productId);
         const user = await User.findById(userId);
         if (!(product && user)) {
             throw new Error('Product or User not found')
         }
-        const index = user.cart.findIndex(id => id === productId)
+        const index = user.cart.findIndex(item =>
+            typeof item === 'string' ? item === productId : item.productId === productId
+        )
         if (index === -1) {
             throw new Error('Product is not in cart')
         }
@@ -176,11 +178,11 @@ export async function removeFromCart(userId, productId) {
         return newCart
     } catch (error) {
         console.log(error)
-        throw new Error("Error removing from favorites");
+        throw new Error("Error removing from cart");
     }
 }
 
-export async function addToCart(userId, productId) {
+export async function addToCart(userId, productId, quantity = 1) {
     try {
         const product = await Product.findById(productId);
         const user = await User.findById(userId);
@@ -188,10 +190,24 @@ export async function addToCart(userId, productId) {
         if (!(product && user)) {
             throw new Error("Product or User not found");
         }
-        if (user.cart.includes(productId)) {
-            throw new Error("Product already in cart");
+
+        // Check if product already exists in cart
+        const existingItemIndex = user.cart.findIndex(item =>
+            typeof item === 'string' ? item === productId : item.productId === productId
+        );
+
+        if (existingItemIndex !== -1) {
+            // Update quantity if product already in cart
+            if (typeof user.cart[existingItemIndex] === 'string') {
+                user.cart[existingItemIndex] = { productId, quantity };
+            } else {
+                user.cart[existingItemIndex].quantity += quantity;
+            }
+        } else {
+            // Add new item to cart
+            user.cart.push({ productId, quantity });
         }
-        user.cart.push(productId);
+
         await user.save();
         return user;
     } catch (error) {

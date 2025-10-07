@@ -3,6 +3,7 @@ import { notFound, useParams } from "next/navigation";
 import ProductImageGallery from "./_components/ProductImageGallery";
 import ProductDetails from "./_components/ProductDetails";
 import RelatedProducts from "./_components/RelatedProducts";
+import Breadcrumb from "@/components/Breadcrumb";
 import { useQuery } from "@tanstack/react-query";
 import { getProductById, getProducts } from "@/lib/api/products";
 import { getUserProfile } from "@/lib/api/auth";
@@ -64,6 +65,20 @@ export default function ProductPage() {
 
   return (
     <main className="space-y-10 my-5">
+      <Breadcrumb
+        items={[
+          { label: "Products", href: "/" },
+          ...(product.category
+            ? [
+                {
+                  label: product.category,
+                  href: `/?category=${product.category}`,
+                },
+              ]
+            : []),
+          { label: product.title },
+        ]}
+      />
       <div className="bg-white rounded-2xl p-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
           <ProductImageGallery images={galleryImages} />

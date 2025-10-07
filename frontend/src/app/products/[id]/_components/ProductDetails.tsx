@@ -3,6 +3,9 @@ import { Product } from "@/app/types/products";
 import { Button } from "@/components/ui/Button";
 import { HeartIcon, MinusIcon, PlusIcon, StarIcon } from "lucide-react";
 import React, { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { addToCart, toggleFavorite } from "@/lib/api/products";
+import { toast } from "sonner";
 
 interface ProductDetailsProps {
   product: Product;
@@ -11,9 +14,60 @@ interface ProductDetailsProps {
 const ProductDetails = ({ product }: ProductDetailsProps) => {
   const [quantity, setQuantity] = useState(1);
   const [isFavorite, setIsFavorite] = useState(product.isInFavorites);
+  const queryClient = useQueryClient();
+
+  const addToCartMutation = useMutation({
+    mutationFn: ({
+      productId,
+      quantity,
+    }: {
+      productId: string;
+      quantity: number;
+    }) => addToCart(productId, quantity),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+      toast.success("Product added to cart!");
+    },
+    onError: (error: unknown) => {
+      const errorMessage =
+        error instanceof Error && "response" in error
+          ? (error as { response?: { data?: { message?: string } } }).response
+              ?.data?.message || "Failed to add to cart"
+          : "Failed to add to cart";
+      toast.error(errorMessage);
+    },
+  });
+
+  const toggleFavoriteMutation = useMutation({
+    mutationFn: (isFavorite: boolean) =>
+      toggleFavorite(String(product.id), isFavorite),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+      setIsFavorite(!isFavorite);
+      toast.success(
+        isFavorite ? "Removed from favorites" : "Added to favorites"
+      );
+    },
+    onError: (error: unknown) => {
+      const errorMessage =
+        error instanceof Error && "response" in error
+          ? (error as { response?: { data?: { message?: string } } }).response
+              ?.data?.message || "Failed to update favorites"
+          : "Failed to update favorites";
+      toast.error(errorMessage);
+    },
+  });
 
   const handleQuantityChange = (change: number) => {
     setQuantity((prev) => Math.max(1, prev + change));
+  };
+
+  const handleAddToCart = () => {
+    addToCartMutation.mutate({ productId: String(product.id), quantity });
+  };
+
+  const handleToggleFavorite = () => {
+    toggleFavoriteMutation.mutate(isFavorite);
   };
 
   return (
@@ -106,17 +160,16 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
             variant="default"
             size="sm"
             className="flex-1"
-            onClick={() => {
-              // Add to cart logic here
-              console.log("Add to cart:", { product, quantity });
-            }}
+            onClick={handleAddToCart}
+            disabled={addToCartMutation.isPending}
           >
-            Add to Cart
+            {addToCartMutation.isPending ? "Adding..." : "Add to Cart"}
           </Button>
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setIsFavorite(!isFavorite)}
+            onClick={handleToggleFavorite}
+            disabled={toggleFavoriteMutation.isPending}
             className="px-6"
           >
             <HeartIcon

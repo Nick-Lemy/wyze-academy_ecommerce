@@ -13,6 +13,11 @@ export interface RegisterCredentials {
   address: string;
 }
 
+export interface CartItem {
+  productId: string;
+  quantity: number;
+}
+
 export interface User {
   _id: string;
   firstName: string;
@@ -21,7 +26,7 @@ export interface User {
   address: string;
   role: "user" | "admin";
   favorites: string[];
-  cart: string[];
+  cart: (string | CartItem)[]; // Support both old and new formats
 }
 
 export interface UpdateUserData {

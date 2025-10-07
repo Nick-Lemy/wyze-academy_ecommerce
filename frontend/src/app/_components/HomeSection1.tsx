@@ -1,5 +1,6 @@
 "use client";
 import ProductCard from "@/components/ProductCard";
+import ProductCardSkeleton from "@/components/ProductCardSkeleton";
 import React, { useState, useMemo } from "react";
 import SearchProducts from "./SearchProducts";
 import { useQuery } from "@tanstack/react-query";
@@ -79,9 +80,11 @@ const HomeSection1 = () => {
             onPriceRangeChange={setSelectedPriceRange}
           />
         </div>
-        <h1 className="text-3xl font-semibold">Headphones For You!</h1>
-        <div className="flex items-center justify-center py-12">
-          <p className="text-gray-500">Loading products...</p>
+        <h1 className="text-3xl font-semibold">Products For You!</h1>
+        <div className="flex flex-wrap gap-6 mt-6">
+          {Array.from({ length: 8 }).map((_, index) => (
+            <ProductCardSkeleton key={index} />
+          ))}
         </div>
       </div>
     );

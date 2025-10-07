@@ -118,8 +118,9 @@ export async function removeFromFavoritesController(req, res) {
 export async function addToCartController(req, res) {
     const { id } = req.params;
     const { userId } = req.user;
+    const { quantity } = req.body;
     try {
-        const result = await addToCart(userId, id);
+        const result = await addToCart(userId, id, quantity || 1);
         res.status(200).send(result);
     } catch (error) {
         console.log(`Error: ${error.message}`)

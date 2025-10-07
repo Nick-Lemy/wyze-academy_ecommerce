@@ -43,8 +43,11 @@ export const removeFromFavorites = async (productId: string): Promise<void> => {
 };
 
 // Add product to cart
-export const addToCart = async (productId: string): Promise<void> => {
-  await axiosInstance.post(`/products/cart/${productId}`);
+export const addToCart = async (
+  productId: string,
+  quantity: number = 1
+): Promise<void> => {
+  await axiosInstance.post(`/products/cart/${productId}`, { quantity });
 };
 
 // Remove product from cart

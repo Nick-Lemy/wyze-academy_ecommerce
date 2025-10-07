@@ -19,7 +19,13 @@ const userSchema = new Schema({
         default: []
     },
     cart: {
-        type: [String],
+        type: [{
+            productId: String,
+            quantity: {
+                type: Number,
+                default: 1
+            }
+        }],
         default: []
     },
     password: {

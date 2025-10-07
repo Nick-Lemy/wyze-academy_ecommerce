@@ -16,7 +16,7 @@ type TabType = "profile" | "orders";
 
 const AccountPage = () => {
   const router = useRouter();
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, loading: authLoading, logout } = useAuth();
   const [activeTab, setActiveTab] = useState<TabType>("profile");
 
   // Fetch user profile
@@ -85,10 +85,10 @@ const AccountPage = () => {
 
   // Redirect to login if not authenticated
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!authLoading && !isAuthenticated) {
       router.push("/login");
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, authLoading, router]);
 
   const handleLogout = () => {
     logout();
@@ -99,7 +99,7 @@ const AccountPage = () => {
     { id: "orders", label: "Orders", icon: PackageIcon },
   ] as const;
 
-  if (isLoading || ordersLoading) {
+  if (authLoading || isLoading || ordersLoading) {
     return (
       <main className="my-5 space-y-3">
         <div className="p-8">

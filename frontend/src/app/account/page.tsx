@@ -1,6 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { sampleOrders } from "@/lib/sampleUserData";
+import React, { useState, useEffect, useMemo } from "react";
 import ProfileSection from "./_components/ProfileSection";
 import OrdersSection from "./_components/OrdersSection";
 import { PackageIcon, UserIcon, LogOut } from "lucide-react";
@@ -9,6 +8,9 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { useQuery } from "@tanstack/react-query";
 import { getUserProfile } from "@/lib/api/auth";
+import { getMyOrders } from "@/lib/api/orders";
+import { getProducts } from "@/lib/api/products";
+import { Order as UIOrder } from "@/app/types/user";
 
 type TabType = "profile" | "orders";
 
@@ -28,6 +30,56 @@ const AccountPage = () => {
     enabled: isAuthenticated,
   });
 
+  // Fetch user orders
+  const {
+    data: orders = [],
+    isLoading: ordersLoading,
+  } = useQuery({
+    queryKey: ["orders"],
+    queryFn: getMyOrders,
+    enabled: isAuthenticated,
+  });
+
+  // Fetch all products to get product details for orders
+  const { data: products = [] } = useQuery({
+    queryKey: ["products"],
+    queryFn: getProducts,
+    enabled: isAuthenticated && orders.length > 0,
+  });
+
+  // Map backend orders to UI format
+  const mappedOrders: UIOrder[] = useMemo(() => {
+    return orders.map((order) => ({
+      id: order._id,
+      orderNumber: `ORD-${order._id.slice(-8).toUpperCase()}`,
+      items: order.products.map((product) => {
+        const productDetails = products.find((p) => p._id === product.productId);
+        return {
+          id: product.productId,
+          productId: product.productId,
+          productTitle: productDetails?.title || "Unknown Product",
+          productImage: productDetails?.image.url || "/placeholder.png",
+          quantity: product.quantity,
+          price: productDetails?.price || 0,
+        };
+      }),
+      totalAmount: order.totalPrice,
+      status: order.status === "paid" ? "pending" : 
+              order.status === "received" ? "delivered" :
+              order.status === "shipping" ? "shipped" :
+              order.status as UIOrder["status"],
+      orderDate: order.createdAt,
+      deliveryDate: order.status === "received" ? order.updatedAt : undefined,
+      shippingAddress: {
+        street: order.shippingAddress,
+        city: "",
+        state: "",
+        zipCode: "",
+        country: "",
+      },
+    }));
+  }, [orders, products]);
+
   // Redirect to login if not authenticated
   useEffect(() => {
     if (!isAuthenticated) {
@@ -44,7 +96,7 @@ const AccountPage = () => {
     { id: "orders", label: "Orders", icon: PackageIcon },
   ] as const;
 
-  if (isLoading) {
+  if (isLoading || ordersLoading) {
     return (
       <main className="my-5 space-y-3">
         <div className="p-8">
@@ -113,7 +165,7 @@ const AccountPage = () => {
       {/* Tab Content */}
       <div className="bg-white rounded-xl p-8">
         {activeTab === "profile" && <ProfileSection user={user} />}
-        {activeTab === "orders" && <OrdersSection orders={sampleOrders} />}
+        {activeTab === "orders" && <OrdersSection orders={mappedOrders} />}
       </div>
     </main>
   );

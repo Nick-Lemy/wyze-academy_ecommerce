@@ -3,6 +3,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getUserProfile } from "@/lib/api/auth";
 import { getProducts, removeFromCart } from "@/lib/api/products";
+import { createOrder } from "@/lib/api/orders";
 import { Product } from "@/lib/api/products";
 import { ShoppingCart, Trash2, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -50,6 +51,47 @@ export default function CartPage() {
 
   const handleRemoveFromCart = (productId: string) => {
     removeCartMutation.mutate(productId);
+  };
+
+  // Checkout mutation
+  const checkoutMutation = useMutation({
+    mutationFn: () =>
+      createOrder({
+        products: cartProducts!.map((product) => ({
+          productId: product._id,
+          quantity: 1, // Currently we don't track quantity, default to 1
+        })),
+        shippingAddress: user?.address || "No address provided",
+        totalPrice: total,
+      }),
+    onSuccess: () => {
+      // Clear cart items after successful order
+      cartProducts?.forEach((product) => {
+        removeCartMutation.mutate(product._id);
+      });
+      queryClient.invalidateQueries({ queryKey: ["userProfile"] });
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      alert("Order placed successfully!");
+      router.push("/account");
+    },
+    onError: (error: AxiosError<{ message: string; error?: string }>) => {
+      const errorMessage =
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        "Failed to place order";
+      alert(errorMessage);
+    },
+  });
+
+  const handleCheckout = () => {
+    if (!user?.address) {
+      alert("Please add a shipping address in your profile before checking out.");
+      router.push("/account");
+      return;
+    }
+    if (cartProducts && cartProducts.length > 0) {
+      checkoutMutation.mutate();
+    }
   };
 
   // Calculate totals
@@ -222,10 +264,20 @@ export default function CartPage() {
 
               <Button
                 className="w-full bg-primary text-white hover:bg-primary-hover py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition"
-                onClick={() => alert("Checkout functionality coming soon!")}
+                onClick={handleCheckout}
+                disabled={checkoutMutation.isPending}
               >
-                Proceed to Checkout
-                <ArrowRight className="h-5 w-5" />
+                {checkoutMutation.isPending ? (
+                  <>
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                    <span>Processing...</span>
+                  </>
+                ) : (
+                  <>
+                    Proceed to Checkout
+                    <ArrowRight className="h-5 w-5" />
+                  </>
+                )}
               </Button>
 
               <button

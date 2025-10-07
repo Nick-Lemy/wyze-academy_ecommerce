@@ -7,7 +7,8 @@ import {
     getProductById,
     addToFavorites,
     removeFromFavorites,
-    removeFromCart
+    removeFromCart,
+    addToCart
 } from '../models/product.model.js'
 import cloudinary from 'cloudinary'
 

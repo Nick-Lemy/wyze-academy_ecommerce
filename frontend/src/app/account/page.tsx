@@ -18,7 +18,11 @@ const AccountPage = () => {
   const [activeTab, setActiveTab] = useState<TabType>("profile");
 
   // Fetch user profile
-  const { data: user, isLoading, error } = useQuery({
+  const {
+    data: user,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["userProfile"],
     queryFn: getUserProfile,
     enabled: isAuthenticated,
@@ -56,7 +60,9 @@ const AccountPage = () => {
       <main className="my-5 space-y-3">
         <div className="p-8">
           <h1 className="text-4xl font-bold text-primary mb-2">My Account</h1>
-          <p className="text-red-500">Error loading profile. Please try again.</p>
+          <p className="text-red-500">
+            Error loading profile. Please try again.
+          </p>
         </div>
       </main>
     );

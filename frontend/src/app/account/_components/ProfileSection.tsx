@@ -27,7 +27,10 @@ const ProfileSection = ({ user }: ProfileSectionProps) => {
       alert("Profile updated successfully!");
     },
     onError: (error: AxiosError<{ message: string; error?: string }>) => {
-      const errorMessage = error.response?.data?.error || error.response?.data?.message || "Update failed. Please try again.";
+      const errorMessage =
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        "Update failed. Please try again.";
       alert(errorMessage);
     },
   });
@@ -65,9 +68,7 @@ const ProfileSection = ({ user }: ProfileSectionProps) => {
           <h3 className="text-xl font-semibold text-primary">
             {formData.firstName} {formData.lastName}
           </h3>
-          <p className="text-[14px] text-gray-600">
-            {user.email}
-          </p>
+          <p className="text-[14px] text-gray-600">{user.email}</p>
         </div>
       </div>
       <div>
@@ -124,9 +125,7 @@ const ProfileSection = ({ user }: ProfileSectionProps) => {
         </div>
       </div>
       <div className="border-t border-gray-200 pt-6">
-        <h3 className="text-xl font-semibold text-primary mb-4">
-          Address
-        </h3>
+        <h3 className="text-xl font-semibold text-primary mb-4">Address</h3>
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-semibold text-primary mb-2">
@@ -148,9 +147,9 @@ const ProfileSection = ({ user }: ProfileSectionProps) => {
 
       {/* Save Button */}
       <div className="border-t border-gray-200 pt-6">
-        <Button 
-          variant="default" 
-          size="sm" 
+        <Button
+          variant="default"
+          size="sm"
           onClick={handleSave}
           disabled={updateMutation.isPending}
         >

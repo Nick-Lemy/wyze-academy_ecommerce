@@ -6,11 +6,14 @@ import { User, getCurrentUser, isAuthenticated, logout } from "@/lib/api/auth";
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
     // Check authentication on mount
     const currentUser = getCurrentUser();
+    const authStatus = isAuthenticated();
     setUser(currentUser);
+    setAuthenticated(authStatus);
     setLoading(false);
   }, []);
 
@@ -21,7 +24,7 @@ export function useAuth() {
   return {
     user,
     loading,
-    isAuthenticated: isAuthenticated(),
+    isAuthenticated: authenticated,
     updateUser,
     logout,
   };

@@ -8,6 +8,11 @@ import { useAuth } from "@/hooks/useAuth";
 
 const NavBar = () => {
   const { isAuthenticated } = useAuth();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <nav className="flex items-center justify-between bg-white">
@@ -25,7 +30,7 @@ const NavBar = () => {
         <LinkItem href="/cart">
           <ShoppingCart className="text-primary size-7" />
         </LinkItem>
-        <LinkItem href={isAuthenticated ? "/account" : "/login"}>
+        <LinkItem href={mounted && isAuthenticated ? "/account" : "/login"}>
           <UserIcon className="size-7 text-primary" />
         </LinkItem>
       </div>

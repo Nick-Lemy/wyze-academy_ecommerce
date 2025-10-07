@@ -3,9 +3,11 @@ import { Product } from "@/app/types/products";
 import Image from "next/image";
 import React from "react";
 import { Button } from "./ui/Button";
-import { useRouter } from "next/navigation";
 import { HeartIcon, StarIcon } from "lucide-react";
 import Link from "next/link";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toggleFavorite, addToCart } from "@/lib/api/products";
+import { AxiosError } from "axios";
 
 type ProductCardProps = Pick<
   Product,
@@ -21,7 +23,54 @@ const ProductCard = ({
   image,
   isInFavorites,
 }: ProductCardProps) => {
-  const router = useRouter();
+  const queryClient = useQueryClient();
+
+  // Toggle favorite mutation
+  const favoriteMutation = useMutation({
+    mutationFn: () => toggleFavorite(String(id), isInFavorites || false),
+    onSuccess: () => {
+      // Invalidate queries to refetch user profile and products
+      queryClient.invalidateQueries({ queryKey: ["userProfile"] });
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+      queryClient.invalidateQueries({ queryKey: ["product", id] });
+    },
+    onError: (error: AxiosError<{ message: string; error?: string }>) => {
+      const errorMessage =
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        "Failed to update favorites";
+      alert(errorMessage);
+    },
+  });
+
+  // Add to cart mutation
+  const cartMutation = useMutation({
+    mutationFn: () => addToCart(String(id)),
+    onSuccess: () => {
+      // Invalidate queries to refetch user profile
+      queryClient.invalidateQueries({ queryKey: ["userProfile"] });
+      alert("Product added to cart!");
+    },
+    onError: (error: AxiosError<{ message: string; error?: string }>) => {
+      const errorMessage =
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        "Failed to add to cart";
+      alert(errorMessage);
+    },
+  });
+
+  const handleFavoriteClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    favoriteMutation.mutate();
+  };
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    cartMutation.mutate();
+  };
+
   return (
     <div className="bg-white rounded-xl p-4 w-75">
       <div className="relative flex justify-center">
@@ -32,11 +81,16 @@ const ProductCard = ({
           height={160}
           className="object-contain"
         />
-        <HeartIcon
-          className={`absolute size-6.5 stroke-1.5 top-2 right-2 text-green-700 ${
-            isInFavorites && "fill-green-700"
-          }`}
-        />
+        <button
+          onClick={handleFavoriteClick}
+          disabled={favoriteMutation.isPending}
+        >
+          <HeartIcon
+            className={`absolute size-6.5 stroke-1.5 top-2 right-2 text-green-700 cursor-pointer hover:scale-110 transition ${
+              isInFavorites && "fill-green-700"
+            } ${favoriteMutation.isPending && "opacity-50"}`}
+          />
+        </button>
       </div>
       <div className="mt-4">
         <div className="flex justify-between items-center">
@@ -65,15 +119,13 @@ const ProductCard = ({
           <span className="text-gray-600 text-xs ml-2">({rating})</span>
         </div>
         <Button
-          onClick={(e) => {
-            e.preventDefault();
-            router.push(`/products/${id}`);
-          }}
+          onClick={handleAddToCart}
+          disabled={cartMutation.isPending}
           size={"xs"}
           variant={"outline"}
-          className="mt-4 w-fit rounded-full  transition"
+          className="mt-4 w-fit rounded-full transition"
         >
-          Add to Cart
+          {cartMutation.isPending ? "Adding..." : "Add to Cart"}
         </Button>
       </div>
     </div>

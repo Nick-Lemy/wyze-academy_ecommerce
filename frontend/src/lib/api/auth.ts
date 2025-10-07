@@ -24,6 +24,12 @@ export interface User {
   cart: string[];
 }
 
+export interface UpdateUserData {
+  firstName?: string;
+  lastName?: string;
+  address?: string;
+}
+
 export interface AuthResponse {
   user: User;
   token: string;
@@ -84,4 +90,22 @@ export const isAuthenticated = (): boolean => {
 export const saveAuthData = (user: User, token: string) => {
   localStorage.setItem("token", token);
   localStorage.setItem("user", JSON.stringify(user));
+};
+
+// Get user profile from API
+export const getUserProfile = async (): Promise<User> => {
+  const { data } = await axiosInstance.get<User>("/auth/profile");
+  // Update localStorage with fresh data
+  localStorage.setItem("user", JSON.stringify(data));
+  return data;
+};
+
+// Update user profile
+export const updateUserProfile = async (
+  userData: UpdateUserData
+): Promise<User> => {
+  const { data } = await axiosInstance.put<User>("/auth/profile", userData);
+  // Update localStorage with fresh data
+  localStorage.setItem("user", JSON.stringify(data));
+  return data;
 };

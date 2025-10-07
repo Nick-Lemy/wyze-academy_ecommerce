@@ -1,42 +1,47 @@
 "use client";
-import { User } from "@/app/types/user";
+import { User } from "@/lib/api/auth";
 import { Button } from "@/components/ui/Button";
-import { MailIcon, MapPinIcon, PhoneIcon, UserIcon } from "lucide-react";
+import { MailIcon, MapPinIcon, UserIcon as UserIconLucide } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { updateUserProfile } from "@/lib/api/auth";
+import { AxiosError } from "axios";
 
 interface ProfileSectionProps {
   user: User;
 }
 
 const ProfileSection = ({ user }: ProfileSectionProps) => {
-  const [formData, setFormData] = useState(user);
+  const queryClient = useQueryClient();
+  const [formData, setFormData] = useState({
+    firstName: user.firstName,
+    lastName: user.lastName,
+    address: user.address,
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: updateUserProfile,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["userProfile"] });
+      alert("Profile updated successfully!");
+    },
+    onError: (error: AxiosError<{ message: string; error?: string }>) => {
+      const errorMessage = error.response?.data?.error || error.response?.data?.message || "Update failed. Please try again.";
+      alert(errorMessage);
+    },
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
-    // Handle nested address fields
-    if (name.startsWith("address.")) {
-      const addressField = name.split(".")[1];
-      setFormData({
-        ...formData,
-        address: {
-          ...formData.address,
-          [addressField]: value,
-        },
-      });
-    } else {
-      setFormData({
-        ...formData,
-        [name]: value,
-      });
-    }
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   };
 
   const handleSave = () => {
-    // In a real app, this would make an API call
-    console.log("Saving user data:", formData);
-    alert("Profile updated successfully!");
+    updateMutation.mutate(formData);
   };
 
   return (
@@ -61,7 +66,7 @@ const ProfileSection = ({ user }: ProfileSectionProps) => {
             {formData.firstName} {formData.lastName}
           </h3>
           <p className="text-[14px] text-gray-600">
-            Member since {new Date(formData.createdAt).toLocaleDateString()}
+            {user.email}
           </p>
         </div>
       </div>
@@ -72,14 +77,14 @@ const ProfileSection = ({ user }: ProfileSectionProps) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-semibold text-primary mb-2">
-              Email Address
+              First Name
             </label>
             <div className="flex items-center gap-2">
-              <MailIcon className="h-5 w-5 text-primary-hover" />
+              <UserIconLucide className="h-5 w-5 text-primary-hover" />
               <input
-                type="email"
-                name="email"
-                value={formData.email}
+                type="text"
+                name="firstName"
+                value={formData.firstName}
                 onChange={handleChange}
                 className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
               />
@@ -88,16 +93,31 @@ const ProfileSection = ({ user }: ProfileSectionProps) => {
 
           <div>
             <label className="block text-sm font-semibold text-primary mb-2">
-              Phone Number
+              Last Name
             </label>
             <div className="flex items-center gap-2">
-              <PhoneIcon className="h-5 w-5 text-primary-hover" />
+              <UserIconLucide className="h-5 w-5 text-primary-hover" />
               <input
-                type="tel"
-                name="phone"
-                value={formData.phone}
+                type="text"
+                name="lastName"
+                value={formData.lastName}
                 onChange={handleChange}
                 className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
+              />
+            </div>
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="block text-sm font-semibold text-primary mb-2">
+              Email Address (Read Only)
+            </label>
+            <div className="flex items-center gap-2">
+              <MailIcon className="h-5 w-5 text-primary-hover" />
+              <input
+                type="email"
+                value={user.email}
+                disabled
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed outline-none"
               />
             </div>
           </div>
@@ -105,85 +125,36 @@ const ProfileSection = ({ user }: ProfileSectionProps) => {
       </div>
       <div className="border-t border-gray-200 pt-6">
         <h3 className="text-xl font-semibold text-primary mb-4">
-          Shipping Address
+          Address
         </h3>
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-semibold text-primary mb-2">
-              Street Address
+              Full Address
             </label>
             <div className="flex items-center gap-2">
               <MapPinIcon className="h-5 w-5 text-primary-hover" />
               <input
                 type="text"
-                name="address.street"
-                value={formData.address.street}
+                name="address"
+                value={formData.address}
                 onChange={handleChange}
                 className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
               />
             </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-semibold text-primary mb-2">
-                City
-              </label>
-              <input
-                type="text"
-                name="address.city"
-                value={formData.address.city}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-primary mb-2">
-                State
-              </label>
-              <input
-                type="text"
-                name="address.state"
-                value={formData.address.state}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-primary mb-2">
-                ZIP Code
-              </label>
-              <input
-                type="text"
-                name="address.zipCode"
-                value={formData.address.zipCode}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-semibold text-primary mb-2">
-              Country
-            </label>
-            <input
-              type="text"
-              name="address.country"
-              value={formData.address.country}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
-            />
           </div>
         </div>
       </div>
 
       {/* Save Button */}
       <div className="border-t border-gray-200 pt-6">
-        <Button variant="default" size="sm" onClick={handleSave}>
-          Save Changes
+        <Button 
+          variant="default" 
+          size="sm" 
+          onClick={handleSave}
+          disabled={updateMutation.isPending}
+        >
+          {updateMutation.isPending ? "Saving..." : "Save Changes"}
         </Button>
       </div>
     </div>

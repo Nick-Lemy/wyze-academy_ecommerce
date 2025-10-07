@@ -1,12 +1,14 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { sampleUser, sampleOrders } from "@/lib/sampleUserData";
+import { sampleOrders } from "@/lib/sampleUserData";
 import ProfileSection from "./_components/ProfileSection";
 import OrdersSection from "./_components/OrdersSection";
 import { PackageIcon, UserIcon, LogOut } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
+import { useQuery } from "@tanstack/react-query";
+import { getUserProfile } from "@/lib/api/auth";
 
 type TabType = "profile" | "orders";
 
@@ -14,6 +16,13 @@ const AccountPage = () => {
   const router = useRouter();
   const { isAuthenticated, logout } = useAuth();
   const [activeTab, setActiveTab] = useState<TabType>("profile");
+
+  // Fetch user profile
+  const { data: user, isLoading, error } = useQuery({
+    queryKey: ["userProfile"],
+    queryFn: getUserProfile,
+    enabled: isAuthenticated,
+  });
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -30,6 +39,28 @@ const AccountPage = () => {
     { id: "profile", label: "Profile", icon: UserIcon },
     { id: "orders", label: "Orders", icon: PackageIcon },
   ] as const;
+
+  if (isLoading) {
+    return (
+      <main className="my-5 space-y-3">
+        <div className="p-8">
+          <h1 className="text-4xl font-bold text-primary mb-2">My Account</h1>
+          <p className="text-gray-700">Loading...</p>
+        </div>
+      </main>
+    );
+  }
+
+  if (error || !user) {
+    return (
+      <main className="my-5 space-y-3">
+        <div className="p-8">
+          <h1 className="text-4xl font-bold text-primary mb-2">My Account</h1>
+          <p className="text-red-500">Error loading profile. Please try again.</p>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="my-5 space-y-3">
@@ -75,7 +106,7 @@ const AccountPage = () => {
 
       {/* Tab Content */}
       <div className="bg-white rounded-xl p-8">
-        {activeTab === "profile" && <ProfileSection user={sampleUser} />}
+        {activeTab === "profile" && <ProfileSection user={user} />}
         {activeTab === "orders" && <OrdersSection orders={sampleOrders} />}
       </div>
     </main>

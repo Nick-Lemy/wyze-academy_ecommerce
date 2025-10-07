@@ -8,6 +8,7 @@ export type Product = {
   image: string;
   images?: string[];
   isInFavorites: boolean;
+  isInCart?: boolean;
   features?: string[];
   sku?: string;
   category?: string;

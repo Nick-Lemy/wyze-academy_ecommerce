@@ -11,7 +11,14 @@ import { AxiosError } from "axios";
 
 type ProductCardProps = Pick<
   Product,
-  "id" | "title" | "miniTitle" | "rating" | "price" | "image" | "isInFavorites"
+  | "id"
+  | "title"
+  | "miniTitle"
+  | "rating"
+  | "price"
+  | "image"
+  | "isInFavorites"
+  | "isInCart"
 >;
 
 const ProductCard = ({
@@ -22,6 +29,7 @@ const ProductCard = ({
   price,
   image,
   isInFavorites,
+  isInCart,
 }: ProductCardProps) => {
   const queryClient = useQueryClient();
 
@@ -120,12 +128,16 @@ const ProductCard = ({
         </div>
         <Button
           onClick={handleAddToCart}
-          disabled={cartMutation.isPending}
+          disabled={cartMutation.isPending || isInCart}
           size={"xs"}
           variant={"outline"}
           className="mt-4 w-fit rounded-full transition"
         >
-          {cartMutation.isPending ? "Adding..." : "Add to Cart"}
+          {cartMutation.isPending
+            ? "Adding..."
+            : isInCart
+            ? "In Cart"
+            : "Add to Cart"}
         </Button>
       </div>
     </div>

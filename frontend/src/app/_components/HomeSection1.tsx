@@ -120,6 +120,7 @@ const HomeSection1 = () => {
               price={product.price}
               image={product.image.url || ""}
               isInFavorites={user?.favorites.includes(product._id) || false}
+              isInCart={user?.cart.includes(product._id) || false}
             />
           ))}
         </div>

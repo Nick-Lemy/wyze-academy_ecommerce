@@ -1,5 +1,5 @@
 import { comparePasswords, generateToken, encryptPassword } from "../helpers/auth.helper.js";
-import { getUserByEmail, createUser, getUserById } from "../models/user.model.js";
+import { getUserByEmail, createUser, getUserById, updateUser } from "../models/user.model.js";
 
 
 export async function registerController(req, res) {
@@ -61,6 +61,17 @@ export async function getCurrentUserController(req, res) {
         res.status(200).json(user);
     } catch (error) {
         console.log(error)
+        res.status(500).send({ error: 'Internal Server Error' });
+    }
+}
+
+export async function updateUserController(req, res) {
+    try {
+        const userId = req.user.userId;
+        const userData = req.body;
+        const updatedUser = await updateUser(userId, userData);
+        res.status(200).json(updatedUser);
+    } catch (error) {
         res.status(500).send({ error: 'Internal Server Error' });
     }
 }

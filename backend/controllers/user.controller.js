@@ -1,4 +1,4 @@
-import { createUser, getAllUsers, getUserById } from "../models/user.model.js";
+import { createUser, getAllUsers, getUserById, updateUser } from "../models/user.model.js";
 import { encryptPassword, generateToken } from "../helpers/auth.helper.js"
 
 export async function getUsersController(req, res) {

@@ -58,6 +58,18 @@ export async function createUser(data) {
     }
 }
 
+export async function updateUser(userId, data) {
+    try {
+        const user = await User.findByIdAndUpdate(userId, data, { new: true })
+        if (!user) {
+            throw new Error("User not found")
+        }
+        return user
+    } catch (error) {
+        throw new Error("Error updating user")
+    }
+}
+
 export async function getAllUsers() {
     try {
         const users = await User.find()

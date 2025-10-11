@@ -22,7 +22,7 @@ jobs:
           script: |
             cd ~/perso/wyze-academy_ecommerce/backend
             git pull origin master
-            sudo docker stop 6414286de435
-            sudo docker rm 6414286de435
+            sudo docker stop wyze-ecommerce
+            sudo docker rm wyze-ecommerce
             sudo docker build -t wyze-ecommerce .
             sudo docker run -d -p 2005:3005 wyze-ecommerce

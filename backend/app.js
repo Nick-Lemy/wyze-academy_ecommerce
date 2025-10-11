@@ -22,7 +22,7 @@ app.use(fileUpload({
 }));
 
 app.get('/', (req, res) => {
-    res.send('Hello World!');
+    res.send('Hello World!sjdf');
 });
 
 app.use('/products', userMiddleware, productRouter)

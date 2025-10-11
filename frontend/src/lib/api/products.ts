@@ -20,9 +20,30 @@ export interface Product {
   category: string;
 }
 
-// Get all products
-export const getProducts = async (): Promise<Product[]> => {
-  const { data } = await axiosInstance.get<Product[]>("/products");
+interface PaginationInfo {
+  currentPage: number;
+  totalPages: number;
+  totalCount: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+}
+
+interface ProductsResponse {
+  products: Product[];
+  pagination?: PaginationInfo;
+}
+
+// Get all products with optional search parameters
+export const getProducts = async (
+  queryParams?: string
+): Promise<ProductsResponse> => {
+  const url = queryParams ? `/products?${queryParams}` : "/products";
+  const { data } = await axiosInstance.get(url);
+
+  // Handle both old format (Product[]) and new format ({ products: Product[], pagination })
+  if (Array.isArray(data)) {
+    return { products: data };
+  }
   return data;
 };
 

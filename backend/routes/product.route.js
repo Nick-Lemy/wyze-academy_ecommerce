@@ -1,10 +1,22 @@
 import { Router } from "express";
-import { addProductController, addToCartController, addToFavoritesController, getProductByIdController, getProductsController, modifyProductController, removeFromCartController, removeFromFavoritesController, removeProductController } from "../controllers/product.controller.js";
+import {
+    addProductController,
+    addToCartController,
+    addToFavoritesController,
+    getProductByIdController,
+    getProductsController,
+    modifyProductController,
+    removeFromCartController,
+    removeFromFavoritesController,
+    removeProductController,
+    getCategoriesController,
+    getFeaturedProductsController,
+    getRelatedProductsController
+} from "../controllers/product.controller.js";
 const productRouter = Router();
 
-productRouter.get('/', getProductsController);
+// Protected routes - authentication required
 productRouter.post('/', addProductController);
-productRouter.get('/:id', getProductByIdController);
 productRouter.put('/:id', modifyProductController);
 productRouter.delete('/:id', removeProductController);
 
@@ -13,4 +25,5 @@ productRouter.delete('/favorites/:id', removeFromFavoritesController)
 
 productRouter.post('/cart/:id', addToCartController)
 productRouter.delete('/cart/:id', removeFromCartController)
+
 export default productRouter;

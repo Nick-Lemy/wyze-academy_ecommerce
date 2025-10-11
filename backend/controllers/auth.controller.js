@@ -5,9 +5,23 @@ import { getUserByEmail, createUser, getUserById, updateUser } from "../models/u
 export async function registerController(req, res) {
     try {
         const { firstName, lastName, email, password, address } = req.body
+
+        // Validation
         if (!(email && password && firstName && lastName && address)) {
-            res.status(400).send('All field are required')
+            return res.status(400).send({ message: 'All fields are required' })
         }
+
+        // Password validation
+        if (password.length < 6) {
+            return res.status(400).send({ message: 'Password must be at least 6 characters long' })
+        }
+
+        // Check if user already exists
+        const existingUser = await getUserByEmail(email.toLowerCase())
+        if (existingUser) {
+            return res.status(409).send({ message: 'User with this email already exists' })
+        }
+
         const encryptedPassword = await encryptPassword(password)
 
         const user = await createUser({
@@ -17,14 +31,17 @@ export async function registerController(req, res) {
             password: encryptedPassword,
             address,
         })
-        const token = generateToken({ userId: user._id, email, role: user.role })
-        user.token = token
-        user.password = undefined
-        user.__v = undefined
 
-        res.status(201).json({ user })
+        const token = generateToken({ userId: user._id, email: user.email, role: user.role })
+
+        // Clean user object
+        const userResponse = user.toObject()
+        delete userResponse.password
+        delete userResponse.__v
+
+        res.status(201).json({ user: userResponse, token })
     } catch (error) {
-        console.log(error)
+        console.error('Registration error:', error)
         res.status(500).send({ error: 'Internal Server Error' });
     }
 }
@@ -32,18 +49,32 @@ export async function registerController(req, res) {
 export async function loginController(req, res) {
     try {
         const { email, password } = req.body;
-        const user = await getUserByEmail(email)
-        if (!user) {
-            res.status(404).send({ message: 'User not found' })
+
+        // Validation
+        if (!email || !password) {
+            return res.status(400).send({ message: 'Email and password are required' })
         }
+
+        const user = await getUserByEmail(email.toLowerCase())
+        if (!user) {
+            return res.status(401).send({ message: 'Invalid email or password' })
+        }
+
         const passwordValidity = await comparePasswords(password, user.password)
         if (!passwordValidity) {
-            res.status(403).send({ message: "The password is incorrect" })
+            return res.status(401).send({ message: 'Invalid email or password' })
         }
+
         const token = generateToken({ userId: user._id, email: user.email, role: user.role })
-        res.status(200).send({ user, token });
+
+        // Clean user object
+        const userResponse = user.toObject()
+        delete userResponse.password
+        delete userResponse.__v
+
+        res.status(200).send({ user: userResponse, token });
     } catch (error) {
-        console.log(error)
+        console.error('Login error:', error)
         res.status(500).send({ message: 'Internal server error' })
     }
 }

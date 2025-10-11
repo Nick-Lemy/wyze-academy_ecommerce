@@ -13,9 +13,9 @@ const HomeSection1 = () => {
   const [selectedPriceRange, setSelectedPriceRange] = useState("all");
 
   // Fetch products
-  const { data: products = [], isLoading: productsLoading } = useQuery({
+  const { data: productData, isLoading: productsLoading } = useQuery({
     queryKey: ["products"],
-    queryFn: getProducts,
+    queryFn: () => getProducts(),
   });
 
   // Fetch user profile to get favorites and cart
@@ -27,6 +27,8 @@ const HomeSection1 = () => {
 
   // Filter products based on search, category, and price
   const filteredProducts = useMemo(() => {
+    const products = productData?.products || [];
+
     return products.filter((product) => {
       // Search filter
       const matchesSearch =
@@ -65,7 +67,7 @@ const HomeSection1 = () => {
 
       return matchesSearch && matchesCategory && matchesPrice;
     });
-  }, [products, searchTerm, selectedCategory, selectedPriceRange]);
+  }, [productData?.products, searchTerm, selectedCategory, selectedPriceRange]);
 
   if (productsLoading) {
     return (

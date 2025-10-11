@@ -28,10 +28,16 @@ const SearchProducts = ({
             onChange={(e) => onCategoryChange(e.target.value)}
           >
             <option value="all">All Categories</option>
-            <option value="headphones">Headphones</option>
-            <option value="smartphones">Smartphones</option>
-            <option value="laptops">Laptops</option>
-            <option value="watches">Watches</option>
+            <option value="electronics">Electronics</option>
+            <option value="clothing">Clothing</option>
+            <option value="books">Books</option>
+            <option value="home">Home & Garden</option>
+            <option value="sports">Sports</option>
+            <option value="beauty">Beauty</option>
+            <option value="toys">Toys</option>
+            <option value="automotive">Automotive</option>
+            <option value="food">Food</option>
+            <option value="other">Other</option>
           </select>
         </div>
         <div className=" border-primary/50 border rounded-xl px-3 bg-primary-hover">

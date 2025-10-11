@@ -38,11 +38,12 @@ const AccountPage = () => {
   });
 
   // Fetch all products to get product details for orders
-  const { data: products = [] } = useQuery({
+  const { data: productData } = useQuery({
     queryKey: ["products"],
-    queryFn: getProducts,
-    enabled: isAuthenticated && orders.length > 0,
+    queryFn: () => getProducts(),
   });
+
+  const products = productData?.products || [];
 
   // Map backend orders to UI format
   const mappedOrders: UIOrder[] = useMemo(() => {

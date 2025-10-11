@@ -22,11 +22,13 @@ export default function OrderConfirmationPage() {
   });
 
   // Fetch products to get details
-  const { data: products = [] } = useQuery({
+  const { data: productData } = useQuery({
     queryKey: ["products"],
-    queryFn: getProducts,
+    queryFn: () => getProducts(),
     enabled: !!order,
   });
+
+  const products = productData?.products || [];
 
   if (orderLoading) {
     return (

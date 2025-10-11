@@ -20,10 +20,12 @@ export default function FavoritePage() {
   });
 
   // Fetch all products
-  const { data: products, isLoading: productsLoading } = useQuery({
+  const { data: productData, isLoading: productsLoading } = useQuery({
     queryKey: ["products"],
-    queryFn: getProducts,
+    queryFn: () => getProducts(),
   });
+
+  const products = productData?.products || [];
 
   // Filter products that are in favorites
   const favoriteProducts = products?.filter((product) =>

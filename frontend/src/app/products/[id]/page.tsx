@@ -23,10 +23,12 @@ export default function ProductPage() {
   });
 
   // Fetch all products for related products
-  const { data: allProducts = [] } = useQuery({
+  const { data: productData } = useQuery({
     queryKey: ["products"],
-    queryFn: getProducts,
+    queryFn: () => getProducts(),
   });
+
+  const allProducts = productData?.products || [];
 
   // Fetch user profile to get favorites and cart
   const { data: user } = useQuery({

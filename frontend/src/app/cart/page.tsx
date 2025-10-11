@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getUserProfile } from "@/lib/api/auth";
 import { getProducts, removeFromCart, addToCart } from "@/lib/api/products";
 import { createOrder } from "@/lib/api/orders";
+import { validateCart } from "@/lib/api/checkout";
 import { Product } from "@/lib/api/products";
 import { ShoppingCart, Trash2, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -25,10 +26,12 @@ export default function CartPage() {
   });
 
   // Fetch all products
-  const { data: products, isLoading: productsLoading } = useQuery({
+  const { data: productData, isLoading: productsLoading } = useQuery({
     queryKey: ["products"],
-    queryFn: getProducts,
+    queryFn: () => getProducts(),
   });
+
+  const products = productData?.products || [];
 
   // Parse cart items and filter products
   const cartItems: Array<{ product: Product; quantity: number }> = [];

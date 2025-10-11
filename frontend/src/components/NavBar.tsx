@@ -23,7 +23,13 @@ const NavBar = () => {
     setMounted(true);
   }, []);
 
-  const cartCount = user?.cart?.length || 0;
+  // Calculate cart count properly for both old and new cart formats
+  const cartCount =
+    user?.cart?.reduce((count, item) => {
+      if (typeof item === "string") return count + 1;
+      return count + (item.quantity || 1);
+    }, 0) || 0;
+
   const favoritesCount = user?.favorites?.length || 0;
 
   return (
@@ -37,6 +43,9 @@ const NavBar = () => {
         <LinkItem href="/favorite" text="Favorite" />
         <LinkItem href="/contact" text="Contact" />
         <LinkItem href="/about" text="About" />
+        {mounted && user?.role === "admin" && (
+          <LinkItem href="/admin" text="Admin" />
+        )}
       </div>
       <div className="flex  gap-5">
         <LinkItem href="/favorite">

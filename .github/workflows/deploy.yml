@@ -8,7 +8,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: SERVER_HOST
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -20,18 +19,31 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd ~/perso/wyze-academy_ecommerce/backend
-            if [ $(git pull origin master || grep backend) ]; then
-              sudo docker stop wyze-ecommerce
-              sudo docker rm wyze-ecommerce
-              sudo docker build -t wyze-ecommerce .
+            cd ~/perso/wyze-academy_ecommerce/
+
+            # Pull latest changes and store changed files
+            CHANGED_FILES=$(git pull origin master | grep -E 'frontend/|backend/')
+
+            if echo "$CHANGED_FILES" | grep -q "backend/"; then
+              echo "Backend changed, rebuilding backend..."
+              cd ./backend
+              sudo docker stop wyze-ecommerce || true
+              sudo docker rm wyze-ecommerce || true
+              sudo docker build -t wyze-ecommerce ./backend
               sudo docker run -d --name wyze-ecommerce -p 2005:3005 wyze-ecommerce
+            else
+              echo "No backend changes."
             fi
-            if [ $(git pull origin master || grep frontend) ]; then
-              cd ../frontend
-              sudo docker stop wyze-frontend
-              sudo docker rm wyze-frontend
+
+            if echo "$CHANGED_FILES" | grep -q "frontend/"; then
+              echo "Frontend changed, rebuilding frontend..."
+              cd ./frontend
+              sudo docker stop wyze-frontend || true
+              sudo docker rm wyze-frontend || true
               sudo docker build -t wyze-frontend .
               sudo docker run -d --name wyze-frontend -p 2006:3000 wyze-frontend
+            else
+              echo "No frontend changes."
             fi
+
             exit 0

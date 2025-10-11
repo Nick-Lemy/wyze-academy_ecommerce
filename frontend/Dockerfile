@@ -6,6 +6,6 @@ COPY package*.json ./
 RUN yarn
 
 COPY . .
-RUM build
+RUN build
 
 CMD ["yarn", "start"]

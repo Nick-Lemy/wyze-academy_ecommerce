@@ -21,8 +21,17 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd ~/perso/wyze-academy_ecommerce/backend
-            git pull origin master
-            sudo docker stop wyze-ecommerce
-            sudo docker rm wyze-ecommerce
-            sudo docker build -t wyze-ecommerce .
-            sudo docker run -d --name wyze-ecommerce -p 2005:3005 wyze-ecommerce
+            if [ $(git pull origin master || grep backend) ]; then
+              sudo docker stop wyze-ecommerce
+              sudo docker rm wyze-ecommerce
+              sudo docker build -t wyze-ecommerce .
+              sudo docker run -d --name wyze-ecommerce -p 2005:3005 wyze-ecommerce
+            fi
+            if [ $(git pull origin master || grep frontend) ]; then
+              cd ../frontend
+              sudo docker stop wyze-frontend
+              sudo docker rm wyze-frontend
+              sudo docker build -t wyze-frontend .
+              sudo docker run -d --name wyze-frontend -p 2006:3000 wyze-frontend
+            fi
+            exit 0

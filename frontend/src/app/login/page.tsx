@@ -20,7 +20,7 @@ const LoginPage = () => {
     {}
   );
 
-  // Login Mutation
+  // Login mutation
   const loginMutation = useMutation({
     mutationFn: login,
     onSuccess: (data) => {

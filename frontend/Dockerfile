@@ -2,16 +2,19 @@ FROM node:24-alpine
 
 WORKDIR /app
 
+# Install some stuff
+npm install -g pnpm
+
 # Copy package files and install dependencies
-COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
 
 # Copy all source code
 COPY . .
 
 # Build the project (if applicable)
-RUN yarn build
+RUN pnpm build
 
 # Start the app
-CMD ["yarn", "start"]
+CMD ["pnpm", "start"]
 

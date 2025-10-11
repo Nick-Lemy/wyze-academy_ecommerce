@@ -22,7 +22,7 @@ app.use(fileUpload({
 }));
 
 app.get('/', (req, res) => {
-    res.send('Final Test of CI!');
+    res.send('Welcome to Wyze Academy!');
 });
 
 app.use('/products', userMiddleware, productRouter)

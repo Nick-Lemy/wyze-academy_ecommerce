@@ -46,12 +46,12 @@ export default function Footer() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                className="flex-1 px-4 py-3 border border-gray-300 rounded focus:outline-none focus:border-primary"
                 required
               />
               <button
                 type="submit"
-                className="bg-primary text-white px-8 py-3 rounded-lg hover:bg-primary-hover transition font-semibold"
+                className="bg-primary text-white px-8 py-3 rounded hover:bg-primary-hover transition font-semibold"
               >
                 Subscribe
               </button>
@@ -81,25 +81,25 @@ export default function Footer() {
             <div className="flex gap-3">
               <a
                 href="#"
-                className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center text-primary hover:bg-primary hover:text-white transition"
+                className="w-10 h-10 bg-gray-100 rounded flex items-center justify-center text-primary hover:bg-primary hover:text-white transition"
               >
                 <Facebook className="h-5 w-5" />
               </a>
               <a
                 href="#"
-                className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center text-primary hover:bg-primary hover:text-white transition"
+                className="w-10 h-10 bg-gray-100 rounded flex items-center justify-center text-primary hover:bg-primary hover:text-white transition"
               >
                 <Twitter className="h-5 w-5" />
               </a>
               <a
                 href="#"
-                className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center text-primary hover:bg-primary hover:text-white transition"
+                className="w-10 h-10 bg-gray-100 rounded flex items-center justify-center text-primary hover:bg-primary hover:text-white transition"
               >
                 <Instagram className="h-5 w-5" />
               </a>
               <a
                 href="#"
-                className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center text-primary hover:bg-primary hover:text-white transition"
+                className="w-10 h-10 bg-gray-100 rounded flex items-center justify-center text-primary hover:bg-primary hover:text-white transition"
               >
                 <Linkedin className="h-5 w-5" />
               </a>

@@ -74,7 +74,7 @@ export default function FavoritePage() {
           </p>
           <button
             onClick={() => router.push("/login")}
-            className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-hover transition"
+            className="bg-primary text-white px-6 py-2 rounded hover:bg-primary-hover transition"
           >
             Go to Login
           </button>
@@ -97,7 +97,7 @@ export default function FavoritePage() {
           </p>
           <button
             onClick={() => router.push("/")}
-            className="bg-primary text-white px-8 py-3 rounded-lg hover:bg-primary-hover transition font-semibold"
+            className="bg-primary text-white px-8 py-3 rounded hover:bg-primary-hover transition font-semibold"
           >
             Browse Products
           </button>

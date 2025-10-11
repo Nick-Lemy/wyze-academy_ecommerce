@@ -129,10 +129,10 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
       <div className="border-t border-gray-200 pt-6">
         <h3 className="text-lg font-semibold text-primary mb-3">Quantity</h3>
         <div className="flex items-center gap-4">
-          <div className="flex items-center border-2 border-primary rounded-lg">
+          <div className="flex items-center border-2 border-primary rounded">
             <button
               onClick={() => handleQuantityChange(-1)}
-              className="p-3 hover:bg-secondary transition"
+              className="p-3 hover:bg-gray-100 transition"
               disabled={quantity <= 1}
             >
               <MinusIcon className="h-5 w-5 text-primary" />
@@ -142,7 +142,7 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
             </span>
             <button
               onClick={() => handleQuantityChange(1)}
-              className="p-3 hover:bg-secondary transition"
+              className="p-3 hover:bg-gray-100 transition"
             >
               <PlusIcon className="h-5 w-5 text-primary" />
             </button>
@@ -178,7 +178,7 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
           </Button>
         </div>
         <Button
-          variant="secondary"
+          variant="outline"
           size="sm"
           className="w-full mt-3"
           onClick={() => {

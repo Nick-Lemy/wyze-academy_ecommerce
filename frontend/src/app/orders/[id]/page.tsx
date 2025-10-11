@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { getOrderById } from "@/lib/api/orders";
-import { getProducts, Product } from "@/lib/api/products";
+import { getProducts } from "@/lib/api/products";
 import { useParams, useRouter } from "next/navigation";
 import { CheckCircle, Package, Truck, Home, ArrowRight } from "lucide-react";
 import Link from "next/link";
@@ -74,7 +74,7 @@ export default function OrderConfirmationPage() {
     <div className="min-h-screen bg-gray-50 py-8 px-4 md:px-10">
       <div className="max-w-4xl mx-auto">
         {/* Success Header */}
-        <div className="bg-white rounded-lg p-8 mb-6 text-center">
+        <div className="bg-white border border-gray-200 rounded p-8 mb-6 text-center">
           <div className="mb-4">
             <CheckCircle className="h-20 w-20 text-green-600 mx-auto" />
           </div>
@@ -85,7 +85,7 @@ export default function OrderConfirmationPage() {
             Thank you for your purchase. Your order has been received and is
             being processed.
           </p>
-          <div className="inline-block bg-gray-100 px-6 py-3 rounded-lg">
+          <div className="inline-block bg-gray-100 px-6 py-3 rounded">
             <p className="text-sm text-gray-600">Order Number</p>
             <p className="text-2xl font-bold text-primary">
               ORD-{order._id.slice(-8).toUpperCase()}
@@ -94,7 +94,7 @@ export default function OrderConfirmationPage() {
         </div>
 
         {/* Order Timeline */}
-        <div className=" rounded-lg p-8 mb-6">
+        <div className="bg-white border border-gray-200 rounded p-8 mb-6">
           <h2 className="text-2xl font-bold text-primary mb-6">
             What&apos;s Next?
           </h2>
@@ -164,7 +164,7 @@ export default function OrderConfirmationPage() {
         </div>
 
         {/* Order Details */}
-        <div className="bg-white rounded-lg p-8 mb-6">
+        <div className="bg-white border border-gray-200 rounded p-8 mb-6">
           <h2 className="text-2xl font-bold text-primary mb-6">
             Order Details
           </h2>
@@ -182,7 +182,7 @@ export default function OrderConfirmationPage() {
                     alt={product.title}
                     width={80}
                     height={80}
-                    className="object-contain rounded-lg bg-gray-50"
+                    className="object-contain rounded bg-gray-50"
                   />
                 </Link>
                 <div className="flex-1">
@@ -261,7 +261,7 @@ export default function OrderConfirmationPage() {
           <Button
             onClick={() => router.push("/")}
             variant="outline"
-            className="flex-1 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition"
+            className="flex-1 py-3 rounded font-semibold flex items-center justify-center gap-2 transition"
           >
             Continue Shopping
           </Button>

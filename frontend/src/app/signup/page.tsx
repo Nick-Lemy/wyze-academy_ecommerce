@@ -109,21 +109,21 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-12 px-4">
-      <div className="max-w-md w-full space-y-8">
+    <div className="min-h-screen flex items-center justify-center py-12 px-4 bg-gray-50">
+      <div className="max-w-md w-full">
         {/* Logo and Title */}
-        <div className="text-center">
-          <div className="flex justify-center mb-4">
-            <Image src={Logo} alt="Logo" className="w-20 h-20 rounded-full" />
+        <div className="text-center mb-8">
+          <div className="flex justify-center mb-6">
+            <Image src={Logo} alt="Logo" className="w-20 h-20 rounded" />
           </div>
-          <h2 className="text-4xl font-bold text-primary mb-2">
+          <h1 className="text-3xl font-bold text-primary mb-2">
             Create Account
-          </h2>
+          </h1>
           <p className="text-gray-600">Sign up to get started</p>
         </div>
 
         {/* Sign Up Form */}
-        <div className="rounded-2xl p-8">
+        <div className="bg-white border border-gray-200 rounded-md p-8">
           <form onSubmit={handleSubmit} className="space-y-5">
             <Input
               label="First Name"

@@ -225,7 +225,7 @@ export default function CartPage() {
             {cartItems.map((item) => (
               <div
                 key={item.product._id}
-                className="bg-white rounded-lg p-6 hover:shadow-md transition"
+                className="bg-white border border-gray-200 rounded p-6 hover:border-gray-300 transition"
               >
                 <div className="flex gap-6">
                   {/* Product Image */}
@@ -238,7 +238,7 @@ export default function CartPage() {
                       alt={item.product.title}
                       width={120}
                       height={120}
-                      className="object-contain rounded-lg"
+                      className="object-contain rounded"
                     />
                   </Link>
 
@@ -260,7 +260,7 @@ export default function CartPage() {
                     {/* Quantity Controls */}
                     <div className="flex items-center gap-4 mb-4">
                       <span className="text-sm text-gray-600">Quantity:</span>
-                      <div className="flex items-center border-2 border-primary rounded-lg">
+                      <div className="flex items-center border-2 border-primary rounded">
                         <button
                           onClick={() =>
                             handleUpdateQuantity(
@@ -272,7 +272,7 @@ export default function CartPage() {
                             item.quantity <= 1 ||
                             updateQuantityMutation.isPending
                           }
-                          className="p-2 hover:bg-secondary transition disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="p-2 hover:bg-gray-100 transition disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -296,7 +296,7 @@ export default function CartPage() {
                             )
                           }
                           disabled={updateQuantityMutation.isPending}
-                          className="p-2 hover:bg-secondary transition disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="p-2 hover:bg-gray-100 transition disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -341,7 +341,7 @@ export default function CartPage() {
 
           {/* Order Summary */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg p-6 sticky top-8">
+            <div className="bg-white border border-gray-200 rounded p-6 sticky top-8">
               <h2 className="text-2xl font-bold text-primary mb-6">
                 Order Summary
               </h2>

@@ -35,7 +35,9 @@ const ProfileSection = ({ user }: ProfileSectionProps) => {
     },
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -87,7 +89,7 @@ const ProfileSection = ({ user }: ProfileSectionProps) => {
                 name="firstName"
                 value={formData.firstName}
                 onChange={handleChange}
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
+                className="flex-1 px-4 py-2 border border-gray-300 rounded focus:border-primary outline-none"
               />
             </div>
           </div>
@@ -103,7 +105,7 @@ const ProfileSection = ({ user }: ProfileSectionProps) => {
                 name="lastName"
                 value={formData.lastName}
                 onChange={handleChange}
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
+                className="flex-1 px-4 py-2 border border-gray-300 rounded focus:border-primary outline-none"
               />
             </div>
           </div>
@@ -118,7 +120,7 @@ const ProfileSection = ({ user }: ProfileSectionProps) => {
                 type="email"
                 value={user.email}
                 disabled
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed outline-none"
+                className="flex-1 px-4 py-2 border border-gray-300 rounded bg-gray-100 cursor-not-allowed outline-none"
               />
             </div>
           </div>
@@ -133,12 +135,12 @@ const ProfileSection = ({ user }: ProfileSectionProps) => {
             </label>
             <div className="flex items-center gap-2">
               <MapPinIcon className="h-5 w-5 text-primary-hover" />
-              <input
-                type="text"
+              <textarea
                 name="address"
+                rows={4}
                 value={formData.address}
                 onChange={handleChange}
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
+                className="flex-1 px-4 py-2 border border-gray-300 rounded focus:border-primary outline-none"
               />
             </div>
           </div>

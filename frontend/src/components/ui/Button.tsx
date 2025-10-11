@@ -4,24 +4,18 @@ import { cn } from "@/lib/utils";
 
 // Define button variants using class-variance-authority
 const buttonVariants = cva(
-  "text-white rounded-lg font-normal hover:bg-transparent transition border border-transparent disabled:border-transparent cursor-pointer disabled:cursor-default disabled:bg-surface-500/20 disabled:text-white min-w-fit",
+  "text-white rounded font-medium hover:bg-transparent transition border border-transparent disabled:border-transparent cursor-pointer disabled:cursor-default disabled:opacity-50 disabled:text-white min-w-fit",
   {
     variants: {
       variant: {
         default:
           "bg-primary hover:text-primary hover:border-primary hover:bg-transparent",
-        secondary:
-          "bg-secondary hover:text-secondary hover:border-secondary hover:bg-white",
-        destructive:
-          "bg-error text-white hover:text-error hover:bg-white hover:border-error",
         outline:
-          "bg-transparent border-primary-hover text-primary-hover hover:bg-primary-hover hover:text-white",
-        "default-outline": "text-primary-hover border-primary-hover",
-        "secondary-outline": "text-secondary border-secondary",
-        ghost: "bg-white text-primary border-transparent hover:bg-surface-200",
-        "ghost-secondary":
-          "bg-white text-secondary border-transparent hover:bg-surface-200",
-        link: "",
+          "bg-transparent border-primary text-primary hover:bg-primary hover:text-white",
+        destructive:
+          "bg-red-600 text-white hover:text-red-600 hover:bg-white hover:border-red-600",
+        ghost: "bg-white text-primary border-transparent hover:bg-gray-100",
+        link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
         default: "py-4 px-8 text-xl",

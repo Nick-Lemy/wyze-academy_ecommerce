@@ -80,7 +80,7 @@ const ProductCard = ({
   };
 
   return (
-    <div className="bg-white rounded-xl p-4 w-75">
+    <div className="bg-white border border-gray-200 rounded p-4 w-full">
       <div className="relative flex justify-center">
         <Image
           src={image}
@@ -92,10 +92,11 @@ const ProductCard = ({
         <button
           onClick={handleFavoriteClick}
           disabled={favoriteMutation.isPending}
+          className="absolute top-2 right-2"
         >
           <HeartIcon
-            className={`absolute size-6.5 stroke-1.5 top-2 right-2 text-green-700 cursor-pointer hover:scale-110 transition ${
-              isInFavorites && "fill-green-700"
+            className={`size-6 stroke-1.5 text-primary hover:text-primary-hover transition ${
+              isInFavorites && "fill-primary text-primary"
             } ${favoriteMutation.isPending && "opacity-50"}`}
           />
         </button>
@@ -129,9 +130,9 @@ const ProductCard = ({
         <Button
           onClick={handleAddToCart}
           disabled={cartMutation.isPending || isInCart}
-          size={"xs"}
-          variant={"outline"}
-          className="mt-4 w-fit rounded-full transition"
+          size="xs"
+          variant="outline"
+          className="mt-4 w-full"
         >
           {cartMutation.isPending
             ? "Adding..."

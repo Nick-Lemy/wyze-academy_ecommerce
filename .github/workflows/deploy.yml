@@ -20,7 +20,7 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd ~/person/wyze-academy_ecommerce/backend
+            cd ~/perso/wyze-academy_ecommerce/backend
             git pull origin master
             sudo docker stop 6414286de435
             sudo docker rm 6414286de435

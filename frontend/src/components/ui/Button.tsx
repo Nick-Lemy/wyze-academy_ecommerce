@@ -2,7 +2,7 @@ import React from "react";
 import { VariantProps, cva } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
-// Define button variants using class-variance-authority
+// Define button variants using cva
 const buttonVariants = cva(
   "text-white rounded font-medium hover:bg-transparent transition border border-transparent disabled:border-transparent cursor-pointer disabled:cursor-default disabled:opacity-50 disabled:text-white min-w-fit",
   {

@@ -27,10 +27,10 @@ jobs:
 
             if echo "$CHANGED_FILES" | grep -q "backend/"; then
               echo "Backend changed, rebuilding backend..."
-              cd ./backend
+              cd ~/perso/wyze-academy_ecommerce/backend
               sudo docker stop wyze-ecommerce || true
               sudo docker rm wyze-ecommerce || true
-              sudo docker build -t wyze-ecommerce ./backend
+              sudo docker build -t wyze-ecommerce .
               sudo docker run -d --name wyze-ecommerce -p 2005:3005 wyze-ecommerce
             else
               echo "No backend changes."
@@ -38,7 +38,7 @@ jobs:
 
             if echo "$CHANGED_FILES" | grep -q "frontend/"; then
               echo "Frontend changed, rebuilding frontend..."
-              cd ./frontend
+              cd ~/perso/wyze-academy_ecommerce/frontend
               sudo docker stop wyze-frontend || true
               sudo docker rm wyze-frontend || true
               sudo docker build -t wyze-frontend .
